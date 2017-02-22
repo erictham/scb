@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>Transactional Banking through Big Data</title>
+  <link rel="stylesheet" href="css/worldcheck.css">
+  <link rel="stylesheet" href="libs/jquery-ui-1.12.1/jquery-ui.structure.min.css">
+  <link rel="stylesheet" href="libs/jquery-ui-1.12.1/jquery-ui.theme.min.css">
+  <script>
+    function takeAction() {
+      // Load D3.js, and once loaded do our stuff
+      var head = document.getElementsByTagName('head')[0];
+      var script = document.createElement('script');
+      script.type = 'text/javascript';
+      script.src = "https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.17/d3.min.js";
+      script.addEventListener('load', D3ok, false);
+      script.onload = "D3ok();";
+      head.appendChild(script);
+
+      initializeResize();
+      initializeSelect();
+      initializeTable();
+    }
+  </script>
+</head>
+<body onload="takeAction();">
+  <header>
+    <div class="group">
+      <img src= "imgs/tr_logo.png" align="top">
+      <img class="scb-logo" src="imgs/scb-logo.png">
+    </div>
+    <h1 class="title">Strategic Prospecting for Transactional Banking <img id="helpIcon" src="imgs/help-question.png" title="Click for help" onClick="toggleDiv('help');"></h1>
+    <div class="action-panel">
+      <select id="organizationsSelect"></select>
+      <input id="search" placeholder="Type something" value="">
+      <button type="button" href="javascript:void(0);" onClick="searchNode();" style="pointer-events: all;">Search</button>
+    </div>
+  </header>
+  
+  <div class="group content-container">
+    <div id="movieInfo" class="panel_off"></div>
+    <div id="graph-container">
+      
+    </div>
+	<h3> <b> Graphical Techniques  </b>  <select id="analyticSelect"></select> </h3>
+	  
+	  <h3> <i> Graphical Analytic Results </i> </h3>
+    <div class="table-container">
+      <table class="basic-table" id="hubs-table">
+        <thead>
+          <tr>
+            <th>No</th>
+            <th class="sortable" field="label">Hub Name<span class="icon icon-mini-down hidden"></span></th>
+            <th class="sortable" field="degree" title="Number of Connections">Connections<span class="icon icon-mini-down"></span></th>
+            <th class="sortable" field="notional" title="Transactional Notional (In million)">Transactions<span class="icon icon-mini-down hidden"></span></th>
+          </tr>
+        </thead>
+        <tbody>
+        </tbody>
+      </table>
+    </div>
+    <div id="help" class="panel_off">
+      <img class="close-button" src="imgs/close.png" style="float: right;" onClick="toggleDiv('help');"/>
+      <p>This is a Proof of Concept and a prototype for Standard Chartered Bank</p>
+      <ul>
+		<li> 1. The first is to identify key hub and spokes in a transactional network through graphical analytical techniques. 
+		For example, most corporates operate through key trading hub companies, with multiple transactions within its group
+		and other entities. This application allows visualisation of the transactional network, identifying the key hub important 
+		for prospecting. In addition, Eikon information for the entities are integrated into the system.
+		</li>
+		<li> 2. Targets 'omitted' prospects through the TR supply chain. These 'omitted' prospects are already banked by SCB, but through the
+		existing TR's supply network enables viewing of their trade deals with other counterparties as well.
+		</li>
+		<li> 3. News analytics: flagging of key events and relationships involving prospects through scanning of unstructured texts. These are
+		scanned bt TR Intelligent Tagging and key events eg. debt financing, M&A, deals financing etc. are notified for a holistic view of the
+		prospects.
+		</li>
+		</ul>
+      <p>For additional information, check the <strong><a href="" onClick="return toggleDiv('faq');">FAQ</a></strong>.</p>
+    </div>
+    <div id="faq" class="panel_off">
+      <div id="close_faq">
+        <img src="imgs/close.png" onClick="toggleDiv('faq');"/>
+      </div>
+      <dl>
+        <dt>Proof of Concept for Standard Chartered Bank</dt>
+      <dd>The <a href="https://www.youtube.com/watch?v=tFuqmUJbZBk">Thomson Reuters product DataFusion</a> 
+	  allows users to see relationships in their data. In this PoC from Thomson Reuters and the SCB data science teams, 
+	  SCB's transactional data is merged with TR"s wealth of company data to show the extensive relationships observed in the
+	  transactional network. TR"s wealth of data includes specific company (NTBs) information as well as its proprietary supply chain 
+	  network that is curated from filings, industry articles and trusted news sources. </dd>
+      </dl>
+      <dl>
+        <dt>Credits</dt>
+        <dd><em>By ASEAN Solutions Consulting and TR Data Science team</em></dd>
+      </dl>
+    </div>
+  </div>
+  <script src="libs/jquery-2.1.0.min.js"></script>
+  <script src="libs/jquery-ui-1.12.1/jquery-ui.min.js"></script>
+  <script src="credit.js"></script>
+</body>
+</html>

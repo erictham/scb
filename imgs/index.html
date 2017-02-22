@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>360° Credit Risk Network</title>
+    <link rel="stylesheet" href="css/worldcheck.css"/>
+    <script>
+      function takeAction() {
+          // Load D3.js, and once loaded do our stuff
+          var head = document.getElementsByTagName('head')[0];
+          var script = document.createElement('script');
+          script.type = 'text/javascript';
+	  script.src = "https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.17/d3.min.js";
+          script.addEventListener('load', D3ok, false);
+          script.onload = "D3ok();";
+	  head.appendChild(script);
+     }
+    </script>
+</head>
+<body onload="takeAction();">
+  <div id="movieNetwork"></div>
+  <div id="sidepanel">
+    <div id="title">
+      <img src="tr_logo.png"/><br/>360° Credit Risk Network<br/>
+    <!--   <a href="javascript:void(0);" 
+              onClick="zoomCall(0.5);" style="pointer-events: all;">+</a>
+      <a href="javascript:void(0);" 
+         onClick="zoomCall(-0.5);" style="pointer-events: all;">-</a> 	-->
+      <img id="helpIcon" 
+           src="imgs/help-question.png" title="Click for help" 
+           onClick="toggleDiv('help');"/>
+    </div> 
+	<div id="searchfun" class="ui-widget" >  <input id="search" value="LAI FUNG HOLDING LTD">
+		<button type="button" href="javascript:void(0);" 
+         onClick="searchNode();" style="pointer-events: all;">Search</button> 
+	</div>
+    <div id="help" class="panel_off">
+      <img src="imgs/close.png" style="float: right;" 
+           onClick="toggleDiv('help');"/>
+		This web-based tool allows the user to make depth level searches on entities
+		based on the WorldCheck database and the DataFusion data sources.
+		It is built for demonstration and Proof of Concept purposes. At present, it
+		is configured for 1MDB, but can be easily extended to any search entity.
+      <ul>
+		<li> How to use it? The user enters '1MDB' into the DataFusion database. 
+		The DataFusion outputs a network of related news and entities that are involved in the
+		saga up to the 3rd/ 4th level. So for eg, 1Malaysia Development Bhd is the first level entity
+		flagged out. This is mentioned in the news article 'Update 1: Malaysian authorities freeze bank accounts
+		linked to PM graft scandal.' Clicking on this link shows the news article to appear. 
+		This news articles in turn raises other related entities eg 'Al-Zaquan Amer Hamzah' (a person).		
+		</li>
+        <li>Hover over a node to see the entity, and to highlight
+        the entities related to it. Click on a node to show entity details. 
+		It will open up a side panel.You can use you usual browser controls 
+		to zoom and pan over the graph. If you zoom in when centred on a entity, the
+        graph will expand around it. Above a certain zoom level, entity titles
+		are automatically displayed for all the related entity.</li>
+		<li>A related entity can also be 'searched' within the network by entering into the search box, and 
+		clicking 'search'. Examples are 'Powertek Energy Sdn Bhd', 'Koong Wai Seng', 'Dennis See' etc
+		</li>
+      </ul>
+      For additional information, check the <strong><a href="" onClick="return toggleDiv('faq');">FAQ</a></strong>.
+    </div>
+
+    <div id="movieInfo" class="panel_off"></div>
+  </div>
+
+  <div id="faq" class="panel_off">
+    <div id="close_faq">
+      <img src="imgs/close.png" onClick="toggleDiv('faq');"/>
+    </div>
+    <dl>
+      <dt>Network of related Entities in 1MDB Saga</dt>
+      <dd>This <a href="https://www.youtube.com/watch?v=tFuqmUJbZBk">DataFusion</a> 
+	  website lets users search for entities, view their details, and find out 
+	  their related entities. </dd>
+
+     The graph network shows a network of relationships related to 1MDB. The bigger the circle, the closer the original relationship to the
+	 1MDB entity saga.
+
+      <dd>Each circle is a entity - either a person or an organisation or a news event; 
+
+		When a entity is selected (hovering or clicking) it is shown as purple
+		in the network. The set of entities linked to it (the ones more similar
+		to it) are also highlighted, this time in blue.<br/>
+
+		The width of the link between two entities reflect the type of relationships eg. directorships, shareholders, or mentioned in the 
+		same breadth.
+		This similarity translates to the force attracting the nodes (so that two very similar entities will tend
+		to stay close, within the constraints imposed by the rest of the
+		forces from the other nodes).<br/>
+
+
+	<dt>Heavily connected network</dt>
+		<dd>The entity has several connected entities in the network <br/>
+		There is a strong central cluster containing some of the most important entities 
+		(it is so dense that it cannot be clearly seen unless you zoom in). Some of them are deeply connected, 
+		check for instance <em><a href="javascript:void(0);" onclick="clearAndSelect(56);">JIMAH TEKNIK SDN BHD</a></em> or <em><a href="javascript:void(0);" onclick="clearAndSelect(8);">1MDB Real Estate Sdn Bhd</a></em>. 
+		Within that central cluster we can also identify thematic subclusters, such as the <a href="javascript:void(0);" onclick="clearAndSelect(18);">1 MDB Saga</a>.<br/> 
+		</dd>
+    </dl>
+    <dt>Credits</dt>
+    <dd><em>
+      By ASEAN Pre-sale team
+</em></dd>
+  </div>
+  <script src="dbscredit.js"></script>
+</body>
+</html>

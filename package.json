@@ -1,0 +1,18 @@
+{
+  "name": "dbsreuters",
+  "version": "0.1.0",
+  "private": true,
+  "engines": {
+    "node": ">=0.10.0"
+  },
+  "devDependencies": {
+    "browser-sync": "^2.7.7",
+    "connect-history-api-fallback": "^1.1.0",
+    "gulp": "~3.8.5",
+    "gulp-bump": "~0.1",
+    "gulp-util": "~2.2.14",
+    "http-proxy-middleware": "0.0.5",
+    "merge-stream": "^0.1.7",
+    "run-sequence": "^1.0.2"
+  }
+}
