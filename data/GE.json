@@ -824,7 +824,7 @@
 		"score": 1,
 		"uris": "http://permid.org/1-4295900810"
 	}],
-	"items": [{"nodelink"53}],
+	"nodelink": 53,
 	"links": [{
 		"source": 18,
 		"target": 42,

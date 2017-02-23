@@ -38,14 +38,14 @@ var selectedItem = "GE.json";
 var optionItems = [
   {"text": "General Electric", "value": "GE.json"},
   //{"text": "General Electric1", "value": "GE1.json"},
-  {"text": "Inditex", "value": "Inditex.json"},
-  {"text": "H&M", "value": "HM.json"}
+  {"text": "Inditex_WIP", "value": "Inditex.json"},
+  {"text": "H&M_WIP", "value": "HM.json"}
 ];
 
 var analyticItems = [
-  {"text": "Degree of Hub Connectedness"},
-  {"text": "Cluster Analysis"},
-  {"text": "Unbanked Entities filtered by TR"}
+  {"text": "ETB Hub Analysis"},
+  {"text": "NTB/ ETB Cluster Analysis"},
+  {"text": "NTB Centrality Analysis"}
 ];
 var hubTable = undefined;
 var sortingField = "degree";
@@ -399,13 +399,21 @@ function D3ok() {
       function(data) {
 
       // Declare the variables pointing to the node & link arrays
-      var nodeArray = data.nodes;
+      var nodeArray_original = data.nodes;
       var linkArray = data.links;
 	  var noLinks = data.nodelink;
+	  //var nodeArray = nodeArray_original
+	  
+	  var nodeArray = $.extend(true, [], nodeArray_original);
+	  for(var i = nodeArray_original.length - 1 ; i >= noLinks - 1; i--) {
+		   nodeArray.splice(i, 1);
+		}
+	  
 	  
       console.log("NODES:",nodeArray);
       console.log("LINKS:",linkArray);
 	  console.log("NOLINKS:",noLinks);
+	  
       initializeAutocomplete(nodeArray);
 
       minLinkWeight = 
