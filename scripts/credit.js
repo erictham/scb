@@ -405,7 +405,7 @@ function D3ok() {
 	  //var nodeArray = nodeArray_original
 	  
 	  var nodeArray = $.extend(true, [], nodeArray_original);
-	  for(var i = nodeArray_original.length - 1 ; i >= noLinks - 1; i--) {
+	  for(var i = nodeArray_original.length - 1 ; i > noLinks - 1; i--) {
 		   nodeArray.splice(i, 1);
 		}
 	  
