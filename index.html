@@ -3,9 +3,8 @@
 <head>
   <meta charset="utf-8">
   <title>Transactional Banking through Big Data</title>
+  <link rel="stylesheet" href="css/EikonWebUI.css">
   <link rel="stylesheet" href="css/worldcheck.css">
-  <link rel="stylesheet" href="libs/jquery-ui-1.12.1/jquery-ui.structure.min.css">
-  <link rel="stylesheet" href="libs/jquery-ui-1.12.1/jquery-ui.theme.min.css">
   <script>
     function takeAction() {
       // Load D3.js, and once loaded do our stuff
@@ -19,17 +18,18 @@
 
       initializeResize();
       initializeSelect();
-      initializeTable();
+      initializeGrid();
+      //initializeTable();
     }
   </script>
 </head>
 <body onload="takeAction();">
   <header>
     <div class="group">
-      <img src= "imgs/tr_logo.png" align="top">
-      <img class="scb-logo" src="imgs/scb-logo.png">
+      <img src= "images/tr_logo.png" align="top">
+      <img class="scb-logo" src="images/scb-logo.png">
     </div>
-    <h1 class="title">Strategic Prospecting for Transactional Banking <img id="helpIcon" src="imgs/help-question.png" title="Click for help" onClick="toggleDiv('help');"></h1>
+    <h1 class="title">Strategic Prospecting for Transactional Banking <img id="helpIcon" src="images/help-question.png" title="Click for help" onClick="toggleDiv('help');"></h1>
     <div class="action-panel">
       <select id="organizationsSelect"></select>
       <input id="search" placeholder="Type something" value="">
@@ -44,9 +44,10 @@
     </div>
 	<h3> <b> Graphical Techniques  </b>  <select id="analyticSelect"></select> </h3>
 	  
-	  <h3> <i> Graphical Analytic Results </i> </h3>
+	  <!--h3> <i> Graphical Analytic Results </i> </h3-->
     <div class="table-container">
-      <table class="basic-table" id="hubs-table">
+      <table id="hubs-grid"></table>
+      <!--table class="basic-table" id="hubs-table">
         <thead>
           <tr>
             <th>No</th>
@@ -57,10 +58,10 @@
         </thead>
         <tbody>
         </tbody>
-      </table>
+      </table-->
     </div>
     <div id="help" class="panel_off">
-      <img class="close-button" src="imgs/close.png" style="float: right;" onClick="toggleDiv('help');"/>
+      <img class="close-button" src="images/close.png" style="float: right;" onClick="toggleDiv('help');"/>
       <p>This is a Proof of Concept and a prototype for Standard Chartered Bank</p>
       <ul>
 		<li> 1. The first is to identify key hub and spokes in a transactional network through graphical analytical techniques. 
@@ -80,7 +81,7 @@
     </div>
     <div id="faq" class="panel_off">
       <div id="close_faq">
-        <img src="imgs/close.png" onClick="toggleDiv('faq');"/>
+        <img src="images/close.png" onClick="toggleDiv('faq');"/>
       </div>
       <dl>
         <dt>Proof of Concept for Standard Chartered Bank</dt>
@@ -98,6 +99,7 @@
   </div>
   <script src="libs/jquery-2.1.0.min.js"></script>
   <script src="libs/jquery-ui-1.12.1/jquery-ui.min.js"></script>
+  <script src="libs/jqGrid/js/jquery.jqGrid.min.js"></script>
   <script src="scripts/credit.js"></script>
 </body>
 </html>

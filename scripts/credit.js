@@ -51,6 +51,10 @@ var hubTable = undefined;
 var sortingField = "degree";
 var sortingDirection = "desc";
 var tableData = undefined;
+var heightOffset = 140;
+var widthOffset = 420;
+var hubGrid = undefined;
+var hubGridContainer = undefined;
 
 var initializeSelect = function () {
   var select = document.querySelector("#organizationsSelect");
@@ -97,12 +101,17 @@ var handleSelectChanged = function (event) {
 var handleResize = function () {
   resetGraphContainer();
   //hideInfoPanel();
+  resizeGrid();
 
   D3ok();
 };
 
 var resetGraphContainer = function () {
   document.querySelector("#graph-container").innerHTML = "";
+};
+
+var resizeGrid = function () {
+  hubGrid.jqGrid('setGridHeight', hubGridContainer.clientHeight - 65);
 };
 
 var hideInfoPanel = function () {
@@ -145,6 +154,44 @@ var initializeTable = function () {
       col.addEventListener("click", handleHeaderClick);
     });
   }  
+};
+
+var initializeGrid = function () {
+  hubGridContainer = document.querySelector('.table-container');
+  if (hubGridContainer) {
+    hubGrid = $("#hubs-grid");
+    hubGrid.jqGrid({
+      datatype: "local",
+      height: hubGridContainer.clientHeight - 65,
+      colNames: ['No', 'Hub Name', 'Connections', 'Transactions', 'URL'],
+      colModel: [
+          { name: 'no', width: 40, sortable: false },
+          { name: 'label', sorttype: "string", formatter: hubNameFormatter },
+          { name: 'degree', width: 100, align: "right", sorttype: "int", classes:"monospace", formatter: numberFormatter },
+          { name: 'notional', width: 100, align: "right", sorttype: "int", classes:"monospace", formatter: numberFormatter },
+          { name: 'EikonWeb_attr', hidden: true }
+      ],
+      multiselect: false,
+      viewrecords: false,
+      caption: "Graphical Analytic Results",
+    });
+  }  
+};
+
+var hubNameFormatter = function (value, options, model) {
+  var output = value;
+  if (model['EikonWeb_attr']) {
+    output = '<a href="' + model['EikonWeb_attr'] + '" target="_blank">' + value + '</a>';
+  }
+  return output;
+};
+
+var numberFormatter = function (value, options, model) {
+  var output = value;
+  if (output === '') {
+    output = '-';
+  }
+  return output;
 };
 
 var handleHeaderClick = function (event) {
@@ -242,6 +289,14 @@ var renderTable = function (nodes) {
     }    
   }
 };
+
+var renderGrid = function (data) {
+  hubGrid.jqGrid('clearGridData');
+  for (var i = 0; i < data.length; i++) {
+    data[i].no = i + 1;
+    hubGrid.addRowData(i + 1, data[i]);  
+  }
+};
 // -------------------------------------------------------------------
 
 // Do the stuff -- to be called after D3.js has loaded
@@ -257,8 +312,8 @@ function D3ok() {
   }
 
   // Some constants
-  var WIDTH = document.body.offsetWidth - 420,
-      HEIGHT = document.body.offsetHeight - 125,
+  var WIDTH = document.body.offsetWidth - widthOffset,
+      HEIGHT = document.body.offsetHeight - heightOffset,
       SHOW_THRESHOLD = 2.5;
 
   // Variables keeping graph state
@@ -756,9 +811,10 @@ function D3ok() {
       if( mid != null )
         clearAndSelect( mid );
 
-      tableData = data.nodes;
-      tableData.sort(sortData.bind(undefined, sortingField, sortingDirection));
-      renderTable(tableData);
+      tableData = data.nodes;      
+      renderGrid(tableData);
+      /*tableData.sort(sortData.bind(undefined, sortingField, sortingDirection));
+      renderTable(tableData);*/
     });
   }
 
