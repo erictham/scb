@@ -101,12 +101,17 @@ var handleSelectChanged = function (event) {
 var handleResize = function () {
   resetGraphContainer();
   //hideInfoPanel();
+  resizeGrid();
 
   D3ok();
 };
 
 var resetGraphContainer = function () {
   document.querySelector("#graph-container").innerHTML = "";
+};
+
+var resizeGrid = function () {
+  hubGrid.jqGrid('setGridHeight', hubGridContainer.clientHeight - 65);
 };
 
 var hideInfoPanel = function () {
@@ -157,7 +162,7 @@ var initializeGrid = function () {
     hubGrid = $("#hubs-grid");
     hubGrid.jqGrid({
       datatype: "local",
-      height: "auto",
+      height: hubGridContainer.clientHeight - 65,
       colNames: ['No', 'Hub Name', 'Connections', 'Transactions', 'URL'],
       colModel: [
           { name: 'no', width: 40, sortable: false },
