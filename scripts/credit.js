@@ -19,7 +19,7 @@ function D3notok() {
 
 // Highlight a movie in the graph. It is a closure within the d3.json() call.
 var selectMovie = undefined;
-
+var nblimit = undefined
 // Change status of a panel from visible to hidden or viceversa
 var toggleDiv = undefined;
 
@@ -36,10 +36,11 @@ var default_node_color = "#ccc";
 var nominal_stroke = 1.5;
 var selectedItem = "GE.json";
 var optionItems = [
+ {"text": "Macy's", "value": "Macy.json"},
   {"text": "General Electric", "value": "GE.json"},
-  //{"text": "General Electric1", "value": "GE1.json"},
-  {"text": "Inditex_WIP", "value": "Inditex.json"},
-  {"text": "H&M_WIP", "value": "HM.json"}
+  {"text": "Tata", "value": "Tata.json"},
+  {"text": "Inditex", "value": "Inditex.json"},
+  {"text": "H&M", "value": "HM.json"}
 ];
 
 var analyticItems = [
@@ -414,23 +415,29 @@ function D3ok() {
       info += '<img class="cover" height="300" src="' + n.cover + '" title="' + n.label + '"/>';
     else		*/
 	
-    info += '<img src="imgs/close.png" class="close-button" title="close panel" onClick="toggleDiv(\'movieInfo\');"/>';
-    info += '<img src="imgs/target-32.png" class="center-button" title="center graph on movie" onclick="selectMovie('+n.index+',true);"/>';
+    info += '<img src="images/close.png" class="close-button" title="close panel" onClick="toggleDiv(\'movieInfo\');"/>';
+    info += '<img src="images/target-32.png" class="center-button" title="center graph on movie" onclick="selectMovie('+n.index+',true);"/>';
     info += '<h2 class="t">' + n.label + '</h2>';
 	
     info += '<br/></div><div style="clear: both;">'
+	if( n.uris )
+      info += '<div class=f><span class=l>Unique Identifier</span>: <span class=d>' 
+           + n.uris + '</span></div>';
     if( n.degree )
       info += '<div class=f><span class=l>No of transacted parties</span>: <span class=g>' 
            + n.degree + '</span></div>';
     if( n.EikonWeb_attr )
       info += '<div class=f><span class=l>EikonWeb</span>: <span class=d> <a href ="' 
            + n.EikonWeb_attr + '" target="_blank" >Eikon Link</a></span></div>';
-	if( n.uris )
-      info += '<div class=f><span class=l>Unique Identifier</span>: <span class=d>' 
-           + n.uris + '</span></div>';
+	if( n.website )
+      info += '<div class=f><span class=l>Home Page</span>: <span class=d> <a href ="' 
+           + n.website + '" target="_blank" >Home Page</a></span></div>';
 	if( n.score )
       info += '<div class=f><span class=l>Transactional Notional (total in million)</span>: <span class=d>' 
            + n.notional + '</span></div>';
+	if( n.SCB_LEID )
+      info += '<div class=f><span class=l>SCB LEID</span>: <span class=d>' 
+           + n.SCB_LEID + '</span></div>';
     if( n.country )
       info += '<div class=f><span class=l>Country of Incorporation</span>: <span class=c>' 
            + n.country + '</span></div>';
@@ -444,6 +451,10 @@ function D3ok() {
     }
     return info;
   }
+  
+  function filterArray(arrayy) {
+    return arrayy['degree'] != 0;
+}
 
   // *************************************************************************
 
@@ -458,12 +469,20 @@ function D3ok() {
       var linkArray = data.links;
 	  var noLinks = data.nodelink;
 	  //var nodeArray = nodeArray_original
-	  
-	  var nodeArray = $.extend(true, [], nodeArray_original);
-	  for(var i = nodeArray_original.length - 1 ; i > noLinks - 1; i--) {
-		   nodeArray.splice(i, 1);
+	  nblimit = data.nodelink;
+	 // var nodeArray ; //= $.extend(true, [], nodeArray_original);
+	  var nodeArray = nodeArray_original.filter(filterArray)
+/* 	  for(var i = 0; nodeArray_original.length - 1 ; i++) {
+		  try{
+		   if (nodeArray[i]['degree'] ==0) {
+			//var idx = nodeArray.indexOf(i)
+			//nodeArray.splice(i, 1);
+			delete nodeArray[i];
+		  }}
+		catch (err){
+			console.log(i);
 		}
-	  
+	  } */
 	  
       console.log("NODES:",nodeArray);
       console.log("LINKS:",linkArray);
@@ -478,10 +497,8 @@ function D3ok() {
       console.log( "link weight = ["+minLinkWeight+","+maxLinkWeight+"]" );
 
     
-    min_score = 
-        Math.min.apply( null, nodeArray.map( function(n) {return n.score;} ) );
-    max_score = 
-        Math.max.apply( null, linkArray.map( function(n) {return n.score;} ) );  
+    min_score = 0;    //   Math.min.apply( null, nodeArray.map( function(n) {return n.score;} ) );
+   // max_score =   Math.max.apply( null, linkArray.map( function(n) {return n.score;} ) );  
     max_score =1.0;
     var color = d3.scale.linear()   /*  scale for ratings   */
     .domain([min_score, (min_score+max_score)/2, max_score])
@@ -555,7 +572,7 @@ function D3ok() {
         .on("mouseout",  function(d) { highlightGraphNode(d,false,this); } )
      //.style("fill", '#EBC763')
 	 .style("fill", function(d) { 
-        if ( d.score>=0) return color(d.score)
+        if ( d.ntb>=0) return color(d.ntb)
         else return default_node_color; });
 
 
