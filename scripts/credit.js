@@ -173,6 +173,7 @@ var initializeGrid = function () {
           { name: 'EikonWeb_attr', hidden: true }
       ],
       multiselect: false,
+      rowNum: 100,
       viewrecords: false,
       caption: "Graphical Analytic Results",
     });
