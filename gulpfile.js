@@ -48,7 +48,6 @@ gulp.task('serve', function () {
   });
 
   gulp.watch(['./*.html'], reload);
-  gulp.watch(['./**/*.css'], reload);
-  gulp.watch(['./**/*.js'], reload);
-  gulp.watch(['bower_components/**/*.html'], reload);
+  gulp.watch(['./css/*.css'], reload);
+  gulp.watch(['./scripts/*.js'], reload);
 });
