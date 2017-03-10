@@ -353,6 +353,22 @@ function D3ok() {
     .attr("viewBox", "0 0 " + WIDTH + " " + HEIGHT )
     .attr("preserveAspectRatio", "xMidYMid meet");
 
+  // Arrow
+  svg.append("defs").selectAll("marker")
+      .data(["suit", "licensing", "resolved"])
+    .enter().append("marker")
+      .attr("id", function(d) { return d; })
+      .attr("viewBox", "0 -5 10 10")
+      .attr("refX", 15)
+      .attr("refY", 0)
+      .attr("markerWidth", 8)
+      .attr("markerHeight", 8)
+      .attr("orient", "auto")
+    .append("path")
+      .attr("d", "M0,-5L10,0L0,5 L10,0 L0, -5")
+      .style("stroke", "#B2D9D8")
+      .style("opacity", "1");
+
   // Movie panel: the div into which the movie details info will be written
   movieInfoDiv = d3.select("#movieInfo");
 
@@ -554,7 +570,22 @@ function D3ok() {
         .data(linkArray, function(d) {return d.source.id+'-'+d.target.id;} )
         .enter().append("line")
         .style('stroke-width', function(d) { return edge_width(d.weight);} )
-        .attr("class", "link");
+        .attr("class", "link")
+        .style("marker-end",  "url(#suit)")
+        .attr("title", function (d) {
+          return d.weight;
+        })
+        /*.on("mouseover", function (d) {
+          console.log('mouseover', d);
+        })
+        .on("mouseout", function (d) {
+          console.log('mouseout', d);
+        });*/
+
+      graphLinks.append("title")
+        .text(function(d) {
+          return d.weight;
+        });
 
       // nodes: an SVG circle
       var graphNodes = networkGraph.append('svg:g').attr('class','grp gNodes')
@@ -627,16 +658,15 @@ function D3ok() {
          - node: data for the node to be changed,  
          - on: true/false to show/hide the node
       */
-      function highlightGraphNode( node, on )
-      {
+      function highlightGraphNode( node, on ) {
         //if( d3.event.shiftKey ) on = false; // for debugging
 
         // If we are to activate a movie, and there's already one active,
         // first switch that one off
-      if( on && activeMovie !== undefined ) {
-      console.log("..clear: ",activeMovie);
-      highlightGraphNode( nodeArray[activeMovie], false );
-      console.log("..cleared: ",activeMovie); 
+        if( on && activeMovie !== undefined ) {
+          console.log("..clear: ",activeMovie);
+          highlightGraphNode( nodeArray[activeMovie], false );
+          console.log("..cleared: ",activeMovie); 
         }
 
         console.log("SHOWNODE "+node.index+" ["+node.label + "]: " + on);
@@ -649,12 +679,10 @@ function D3ok() {
         // activate/deactivate the node itself
         console.log(" ..box CLASS BEFORE:", label.attr("class"));
         console.log(" ..circle",circle.attr('id'),"BEFORE:",circle.attr("class"));
-        circle
-      .classed( 'main', on );
-        label
-      .classed( 'on', on || currentZoom >= SHOW_THRESHOLD );
+        circle.classed( 'main', on );
+        label.classed( 'on', on || currentZoom >= SHOW_THRESHOLD );
         label.selectAll('text')
-      .classed( 'main', on );
+          .classed( 'main', on );
         console.log(" ..circle",circle.attr('id'),"AFTER:",circle.attr("class"));
         console.log(" ..box AFTER:",label.attr("class"));
         console.log(" ..label=",label);
@@ -662,12 +690,12 @@ function D3ok() {
         // activate all siblings
         console.log(" ..SIBLINGS ["+on+"]: "+node.links);
         Object(node.links).forEach( function(id) {
-      d3.select("#c"+id).classed( 'sibling', on );
-      label = d3.select('#l'+id);
-      label.classed( 'on', on || currentZoom >= SHOW_THRESHOLD );
-      label.selectAll('text.nlabel')
-        .classed( 'sibling', on );
-        } );
+          d3.select("#c"+id).classed( 'sibling', on );
+          label = d3.select('#l'+id);
+          label.classed( 'on', on || currentZoom >= SHOW_THRESHOLD );
+          label.selectAll('text.nlabel')
+            .classed( 'sibling', on );
+        });
 
         // set the value for the current active movie
         activeMovie = on ? node.index : undefined;
