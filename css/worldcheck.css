@@ -96,7 +96,7 @@ div.panel_on {
 
 .ui-autocomplete.ui-front {
     width: 220px !important;
-    height: 500px;
+    max-height: 500px;
     overflow-x: hidden;
     overflow-y: auto;
 }
