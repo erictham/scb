@@ -56,6 +56,7 @@ var heightOffset = 140;
 var widthOffset = 420;
 var hubGrid = undefined;
 var hubGridContainer = undefined;
+var weightTooltip = undefined;
 
 var initializeSelect = function () {
   var select = document.querySelector("#organizationsSelect");
@@ -297,6 +298,28 @@ var renderGrid = function (data) {
   for (var i = 0; i < data.length; i++) {
     data[i].no = i + 1;
     hubGrid.addRowData(i + 1, data[i]);  
+  }
+};
+
+var displayWeightTooltip = function (link, weight) {  
+  if (weightTooltip) {
+    var box = link[0][0].getBoundingClientRect();
+    if (box) {
+      weightTooltip.style.top = box.top + 'px';
+      weightTooltip.style.left = box.left + 'px';
+      weightTooltip.style.display = '';
+      weightTooltip.innerHTML = weight;
+    }
+  }
+  else {
+    weightTooltip = document.querySelector('#weightTooltip');
+    displayWeightTooltip(link, weight);
+  }
+};
+
+var hideWeightTooltip = function () {
+  if (weightTooltip) {
+    weightTooltip.style.display = 'none';
   }
 };
 // -------------------------------------------------------------------
@@ -575,16 +598,15 @@ function D3ok() {
         .attr("title", function (d) {
           return d.weight;
         })
-        /*.on("mouseover", function (d) {
-          console.log('mouseover', d);
+        .on("mouseover", function (d) {
+          var link = d3.select(this);
+          link.style("stroke", "#0072AA");
+          
+          displayWeightTooltip(link, d.weight);
         })
         .on("mouseout", function (d) {
-          console.log('mouseout', d);
-        });*/
-
-      graphLinks.append("title")
-        .text(function(d) {
-          return d.weight;
+          d3.select(this).style("stroke", null);
+          hideWeightTooltip();
         });
 
       // nodes: an SVG circle
