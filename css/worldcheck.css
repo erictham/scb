@@ -113,7 +113,7 @@ div.panel_on {
 
 .ui-menu>.ui-menu-item>.ui-state-active {
     background-color: rgba(255, 255, 255, 0.07);
-    color: #ffffff
+    color: #ffffff;
 }
 
 
@@ -388,6 +388,16 @@ text.main {
 
 h1.title {
     font-size: 28px;
+}
+
+#weightTooltip {
+    border: 1px solid #0a0a0a;
+    position: absolute;
+    background-color: #2E2E33;
+    padding: 5px;
+    color: #c2c2c2;
+    border-radius: 8px;
+    z-index: 100;
 }
 
 /*Clear fix*/
