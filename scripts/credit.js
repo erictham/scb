@@ -598,18 +598,6 @@ function D3ok() {
         .attr("title", function (d) {
           return d.weight;
         })
-<<<<<<< HEAD
-        /*.on("mouseover", function (d) {
-          console.log('mouseover', d);
-        })
-        .on("mouseout", function (d) {
-          console.log('mouseout', d);
-        });*/
-
-      graphLinks.append("title")
-        .text(function(d) {
-          return d.weight;
-=======
         .on("mouseover", function (d) {
           var link = d3.select(this);
           link.style("stroke", "#0072AA");
@@ -619,7 +607,6 @@ function D3ok() {
         .on("mouseout", function (d) {
           d3.select(this).style("stroke", null);
           hideWeightTooltip();
->>>>>>> 6fc925581bed9862b171f1e6b61ea6986d22c0b9
         });
 
       // nodes: an SVG circle
