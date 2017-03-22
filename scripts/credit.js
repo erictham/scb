@@ -48,13 +48,15 @@ var analyticItems = [
   {"text": "NTB/ ETB Cluster Analysis"},
   {"text": "NTB Centrality Analysis"}
 ];
-var hubTable = undefined;
 var sortingField = "degree";
 var sortingDirection = "desc";
 var tableData = undefined;
 var heightOffset = 140;
 var widthOffset = 420;
-var hubGrid = undefined;
+var hubGridZero = undefined;
+var hubGridOne = undefined;
+var hubGridTwoTen = undefined;
+var hubGridEleveMore = undefined;
 var hubGridContainer = undefined;
 var weightTooltip = undefined;
 
@@ -113,7 +115,7 @@ var resetGraphContainer = function () {
 };
 
 var resizeGrid = function () {
-  hubGrid.jqGrid('setGridHeight', hubGridContainer.clientHeight - 65);
+  hubGridZero.jqGrid('setGridHeight', hubGridContainer.clientHeight - 65);
 };
 
 var hideInfoPanel = function () {
@@ -148,26 +150,16 @@ var handleEnter = function (event) {
   }
 };
 
-var initializeTable = function () {
-  hubTable = document.querySelector("#hubs-table");
-  if (hubTable) {
-    var cols = hubTable.querySelectorAll("th.sortable");
-    cols.forEach(function (col) {
-      col.addEventListener("click", handleHeaderClick);
-    });
-  }  
-};
-
 var initializeGrid = function () {
   hubGridContainer = document.querySelector('.table-container');
   if (hubGridContainer) {
-    hubGrid = $("#hubs-grid");
-    hubGrid.jqGrid({
+    hubGridZero = $("#hubs-grid-0");
+    hubGridZero.jqGrid({
       datatype: "local",
       height: hubGridContainer.clientHeight - 65,
       colNames: ['No', 'Hub Name', 'Connections', 'Transactions', 'URL'],
       colModel: [
-          { name: 'no', width: 40, sortable: false },
+          { name: 'no', width: 50, sortable: false },
           { name: 'label', sorttype: "string", formatter: hubNameFormatter },
           { name: 'degree', width: 100, align: "right", sorttype: "int", classes:"monospace", formatter: numberFormatter },
           { name: 'notional', width: 100, align: "right", sorttype: "int", classes:"monospace", formatter: numberFormatter },
@@ -176,7 +168,61 @@ var initializeGrid = function () {
       multiselect: false,
       rowNum: 100,
       viewrecords: false,
-      caption: "Graphical Analytic Results",
+      caption: "Graphical Analytic Results: 0 Degree",
+    });
+
+    hubGridOne = $("#hubs-grid-1");
+    hubGridOne.jqGrid({
+      datatype: "local",
+      height: hubGridContainer.clientHeight - 65,
+      colNames: ['No', 'Hub Name', 'Connections', 'Transactions', 'URL'],
+      colModel: [
+          { name: 'no', width: 50, sortable: false },
+          { name: 'label', sorttype: "string", formatter: hubNameFormatter },
+          { name: 'degree', width: 100, align: "right", sorttype: "int", classes:"monospace", formatter: numberFormatter },
+          { name: 'notional', width: 100, align: "right", sorttype: "int", classes:"monospace", formatter: numberFormatter },
+          { name: 'EikonWeb_attr', hidden: true }
+      ],
+      multiselect: false,
+      rowNum: 100,
+      viewrecords: false,
+      caption: "Graphical Analytic Results: 1 Degree",
+    });
+
+    hubGridTwoTen = $("#hubs-grid-2-10");
+    hubGridTwoTen.jqGrid({
+      datatype: "local",
+      height: hubGridContainer.clientHeight - 65,
+      colNames: ['No', 'Hub Name', 'Connections', 'Transactions', 'URL'],
+      colModel: [
+          { name: 'no', width: 50, sortable: false },
+          { name: 'label', sorttype: "string", formatter: hubNameFormatter },
+          { name: 'degree', width: 100, align: "right", sorttype: "int", classes:"monospace", formatter: numberFormatter },
+          { name: 'notional', width: 100, align: "right", sorttype: "int", classes:"monospace", formatter: numberFormatter },
+          { name: 'EikonWeb_attr', hidden: true }
+      ],
+      multiselect: false,
+      rowNum: 100,
+      viewrecords: false,
+      caption: "Graphical Analytic Results: 2 - 10 Degree",
+    });
+
+    hubGridEleveMore = $("#hubs-grid-11");
+    hubGridEleveMore.jqGrid({
+      datatype: "local",
+      height: hubGridContainer.clientHeight - 65,
+      colNames: ['No', 'Hub Name', 'Connections', 'Transactions', 'URL'],
+      colModel: [
+          { name: 'no', width: 50, sortable: false },
+          { name: 'label', sorttype: "string", formatter: hubNameFormatter },
+          { name: 'degree', width: 100, align: "right", sorttype: "int", classes:"monospace", formatter: numberFormatter },
+          { name: 'notional', width: 100, align: "right", sorttype: "int", classes:"monospace", formatter: numberFormatter },
+          { name: 'EikonWeb_attr', hidden: true }
+      ],
+      multiselect: false,
+      rowNum: 100,
+      viewrecords: false,
+      caption: "Graphical Analytic Results: 11 or More Degree",
     });
   }  
 };
@@ -197,111 +243,43 @@ var numberFormatter = function (value, options, model) {
   return output;
 };
 
-var handleHeaderClick = function (event) {
-  var target = event.currentTarget;
-  var field = target.getAttribute("field");
-  var icons = hubTable.querySelectorAll("th.sortable .icon");
-  var icon = target.querySelector(".icon");
-  icons.forEach(function (icon) {
-    if (icon.className.indexOf("hidden") === -1) {
-      icon.className += " hidden";
-    }
-  });
-  if (field === sortingField) {
-    var from = "down", to = "up";
-    if (sortingDirection === "asc") {
-      sortingDirection = "desc";
-      from = "up";
-      to = "down";
-    }
-    else {
-      sortingDirection = "asc";
-      from = "down";
-      to = "up";
-    }
-    icon.className = icon.className.replace(from, to);
-    icon.className = icon.className.replace("hidden", "");
-  }
-  else {
-    sortingField = field;
-    sortingDirection = "desc";
-    icon.className = "icon icon-mini-down";
-  }
-
-  tableData.sort(sortData.bind(undefined, sortingField, sortingDirection));
-  clearTable();
-  renderTable(tableData);
-
-};
-
-var sortData = function (field, direction, a, b) {
-  var output;
-  if (a[field] > b[field]) {
-    output = -1;
-  }
-  else if (a[field] < b[field]) {
-    output = 1;
-  }
-  else {
-    output = 0;
-  }
-  if (direction.toLowerCase() === "asc") {
-    output *= -1;
-  }
-  return output;
-};
-
-var clearTable = function () {
-  if (hubTable) {
-    hubTable.querySelector("tbody").innerHTML = "";
-  }
-};
-
-var renderTable = function (nodes) {
-  clearTable();
-  if (hubTable) {
-    var body = hubTable.querySelector("tbody");
-    if (body) {
-      nodes.forEach(function (node, index) {
-        var row = document.createElement("tr");
-        var no = document.createElement("td");
-        var name = document.createElement("td");
-        var connections = document.createElement("td");
-        var transitions = document.createElement("td");
-
-        body.appendChild(row);
-
-        no.innerHTML = index + 1;
-
-        if (node.EikonWeb_attr) {
-          name.innerHTML = "<a href='" + node.EikonWeb_attr + "' target='_blank'>" + node.label + "</a>";
-        }
-        else {
-          name.innerHTML = node.label;
-        }        
-        connections.className = "text-right";
-        connections.innerHTML = node.degree ? node.degree : "-";
-        transitions.className = "text-right";
-        transitions.innerHTML = node.notional ? node.notional : "-";
-
-        row.appendChild(no);
-        row.appendChild(name);
-        row.appendChild(connections);
-        row.appendChild(transitions);
-      });
-    }    
-  }
-};
-
 var renderGrid = function (data) {
-  hubGrid.jqGrid('clearGridData');
-  for (var i = 0; i < data.length; i++) {
-    data[i].no = i + 1;
-    hubGrid.addRowData(i + 1, data[i]);  
+  hubGridZero.jqGrid('clearGridData');
+  hubGridOne.jqGrid('clearGridData');
+  hubGridTwoTen.jqGrid('clearGridData');
+  hubGridEleveMore.jqGrid('clearGridData');
+  var i = 0;
+  var dataZero = data.filter(function (datum) {
+    return datum.degree === 0;
+  });
+  var dataOne = data.filter(function (datum) {
+    return datum.degree === 1;
+  });
+  var dataTwoTen = data.filter(function (datum) {
+    return datum.degree >= 2 && datum.degree <= 10;
+  });
+  var dataElevenMore = data.filter(function (datum) {
+    return datum.degree > 10;
+  });
+  for (i = 0; i < dataZero.length; i++) {
+    dataZero[i].no = i + 1;
+    hubGridZero.addRowData(i + 1, dataZero[i]);
+  }
+  for (i = 0; i < dataOne.length; i++) {
+    dataOne[i].no = i + 1;
+    hubGridOne.addRowData(i + 1, dataOne[i]);
+  }
+  for (i = 0; i < dataTwoTen.length; i++) {
+    dataTwoTen[i].no = i + 1;
+    hubGridTwoTen.addRowData(i + 1, dataTwoTen[i]);
+  }
+  for (i = 0; i < dataElevenMore.length; i++) {
+    dataElevenMore[i].no = i + 1;
+    hubGridEleveMore.addRowData(i + 1, dataElevenMore[i]);
   }
 };
 
-var displayWeightTooltip = function (link, weight) {  
+var displayWeightTooltip = function (link, weight) {
   if (weightTooltip) {
     var box = link[0][0].getBoundingClientRect();
     if (box) {
@@ -865,7 +843,7 @@ function D3ok() {
       }
 
       zoomCall = doZoom;  // unused, so far
-    searchNode = dosearchNode;
+      searchNode = dosearchNode;
 
       /* --------------------------------------------------------------------- */
 
@@ -875,14 +853,13 @@ function D3ok() {
       });
 
       /* A small hack to start the graph with a movie pre-selected */
-      mid = getQStringParameterByName('id')
-      if( mid != null )
-        clearAndSelect( mid );
+      mid = getQStringParameterByName('id');
+      if (mid !== null) {
+        clearAndSelect(mid);
+      }
 
-      tableData = data.nodes;      
+      tableData = data.nodes;
       renderGrid(tableData);
-      /*tableData.sort(sortData.bind(undefined, sortingField, sortingDirection));
-      renderTable(tableData);*/
     });
   }
 
