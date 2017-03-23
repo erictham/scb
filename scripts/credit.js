@@ -156,7 +156,7 @@ var initializeGrid = function () {
     hubGridZero = $("#hubs-grid-0");
     hubGridZero.jqGrid({
       datatype: "local",
-      height: hubGridContainer.clientHeight - 65,
+      height: hubGridContainer.clientHeight - (65 + 95),
       colNames: ['No', 'Hub Name', 'Connections', 'Transactions', 'URL'],
       colModel: [
           { name: 'no', width: 50, sortable: false },
@@ -174,7 +174,7 @@ var initializeGrid = function () {
     hubGridOne = $("#hubs-grid-1");
     hubGridOne.jqGrid({
       datatype: "local",
-      height: hubGridContainer.clientHeight - 65,
+      height: hubGridContainer.clientHeight - (65 + 95),
       colNames: ['No', 'Hub Name', 'Connections', 'Transactions', 'URL'],
       colModel: [
           { name: 'no', width: 50, sortable: false },
@@ -192,7 +192,7 @@ var initializeGrid = function () {
     hubGridTwoTen = $("#hubs-grid-2-10");
     hubGridTwoTen.jqGrid({
       datatype: "local",
-      height: hubGridContainer.clientHeight - 65,
+      height: hubGridContainer.clientHeight - (65 + 95),
       colNames: ['No', 'Hub Name', 'Connections', 'Transactions', 'URL'],
       colModel: [
           { name: 'no', width: 50, sortable: false },
@@ -210,7 +210,7 @@ var initializeGrid = function () {
     hubGridEleveMore = $("#hubs-grid-11");
     hubGridEleveMore.jqGrid({
       datatype: "local",
-      height: hubGridContainer.clientHeight - 65,
+      height: hubGridContainer.clientHeight - (65 + 95),
       colNames: ['No', 'Hub Name', 'Connections', 'Transactions', 'URL'],
       colModel: [
           { name: 'no', width: 50, sortable: false },
@@ -265,17 +265,51 @@ var renderGrid = function (data) {
     dataZero[i].no = i + 1;
     hubGridZero.addRowData(i + 1, dataZero[i]);
   }
+  var renderedHubGridZero = document.querySelector('#gview_hubs-grid-0');
+  collapsibleTable(renderedHubGridZero);
+  
   for (i = 0; i < dataOne.length; i++) {
     dataOne[i].no = i + 1;
     hubGridOne.addRowData(i + 1, dataOne[i]);
   }
+  var renderedHubGridOne = document.querySelector('#gview_hubs-grid-1');
+  collapsibleTable(renderedHubGridOne);
+
   for (i = 0; i < dataTwoTen.length; i++) {
     dataTwoTen[i].no = i + 1;
     hubGridTwoTen.addRowData(i + 1, dataTwoTen[i]);
   }
+  var renderedHubGridTwoTen = document.querySelector('#gview_hubs-grid-2-10');
+  collapsibleTable(renderedHubGridTwoTen);
+
   for (i = 0; i < dataElevenMore.length; i++) {
     dataElevenMore[i].no = i + 1;
     hubGridEleveMore.addRowData(i + 1, dataElevenMore[i]);
+  }
+  var renderedHubGridEleveMore = document.querySelector('#gview_hubs-grid-11');
+  collapsibleTable(renderedHubGridEleveMore);
+
+};
+
+var collapsibleTable = function (grid) {
+  if (grid) {
+    var title = grid.querySelector('.ui-jqgrid-titlebar');
+    var header = grid.querySelector('.ui-jqgrid-hdiv');
+    var table = grid.querySelector('.ui-jqgrid-bdiv');
+    if (title && header && table) {
+      header.style.display = 'none';
+      table.style.display = 'none';
+      title.addEventListener('dblclick', function () {
+        if (header.style.display === 'none') {
+          header.style.display = '';
+          table.style.display = '';
+        }
+        else {
+          header.style.display = 'none';
+          table.style.display = 'none';
+        }
+      });
+    }
   }
 };
 
