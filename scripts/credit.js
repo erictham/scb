@@ -1,4 +1,3 @@
-
 // For MSIE < 9, forget it
 function D3notok() {
   document.getElementById('sidepanel').style.visibility = 'hidden';
@@ -168,7 +167,7 @@ var initializeGrid = function () {
       multiselect: false,
       rowNum: 100,
       viewrecords: false,
-      caption: "Graphical Analytic Results: 0 Degree",
+      caption: "Main Hub",
     });
 
     hubGridOne = $("#hubs-grid-1");
@@ -186,7 +185,7 @@ var initializeGrid = function () {
       multiselect: false,
       rowNum: 100,
       viewrecords: false,
-      caption: "Graphical Analytic Results: 1 Degree",
+      caption: "Secondary Hub 1",
     });
 
     hubGridTwoTen = $("#hubs-grid-2-10");
@@ -204,7 +203,7 @@ var initializeGrid = function () {
       multiselect: false,
       rowNum: 100,
       viewrecords: false,
-      caption: "Graphical Analytic Results: 2 - 10 Degree",
+      caption: "Secondary Hub 2",
     });
 
     hubGridEleveMore = $("#hubs-grid-11");
@@ -222,7 +221,7 @@ var initializeGrid = function () {
       multiselect: false,
       rowNum: 100,
       viewrecords: false,
-      caption: "Graphical Analytic Results: 11 or More Degree",
+      caption: "Secondary Hub 3",
     });
   }  
 };
@@ -320,7 +319,7 @@ var displayWeightTooltip = function (link, weight) {
       weightTooltip.style.top = box.top + 'px';
       weightTooltip.style.left = box.left + 'px';
       weightTooltip.style.display = '';
-      weightTooltip.innerHTML = weight;
+      weightTooltip.innerHTML = "Txn Amt (millions):" + weight;
     }
   }
   else {
@@ -554,7 +553,7 @@ function D3ok() {
     max_score =1.0;
     var color = d3.scale.linear()   /*  scale for ratings   */
     .domain([min_score, (min_score+max_score)/2, max_score])
-    .range(["lime", "yellow", "red"]);
+    .range(["#57E964", "yellow", "#488AC7"]);
     
       // Add the node & link arrays to the layout, and start it
       force
