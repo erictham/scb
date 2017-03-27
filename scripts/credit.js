@@ -1,4 +1,3 @@
-
 // For MSIE < 9, forget it
 function D3notok() {
   document.getElementById('sidepanel').style.visibility = 'hidden';
@@ -554,7 +553,7 @@ function D3ok() {
     max_score =1.0;
     var color = d3.scale.linear()   /*  scale for ratings   */
     .domain([min_score, (min_score+max_score)/2, max_score])
-    .range(["lime", "yellow", "red"]);
+    .range(["#57E964", "yellow", "#488AC7"]);
     
       // Add the node & link arrays to the layout, and start it
       force
