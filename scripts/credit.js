@@ -58,6 +58,10 @@ var hubGridTwoTen = undefined;
 var hubGridEleveMore = undefined;
 var hubGridContainer = undefined;
 var weightTooltip = undefined;
+var hubGridZeroAttached = false;
+var hubGridOneAttached = false;
+var hubGridTwoTenAttached = false;
+var hubGridEleveMoreAttached = false;
 
 var initializeSelect = function () {
   var select = document.querySelector("#organizationsSelect");
@@ -265,49 +269,58 @@ var renderGrid = function (data) {
     hubGridZero.addRowData(i + 1, dataZero[i]);
   }
   var renderedHubGridZero = document.querySelector('#gview_hubs-grid-0');
-  collapsibleTable(renderedHubGridZero);
+  collapsibleTable(renderedHubGridZero, hubGridZeroAttached);
+  hubGridZeroAttached = true;
   
   for (i = 0; i < dataOne.length; i++) {
     dataOne[i].no = i + 1;
     hubGridOne.addRowData(i + 1, dataOne[i]);
   }
   var renderedHubGridOne = document.querySelector('#gview_hubs-grid-1');
-  collapsibleTable(renderedHubGridOne);
+  collapsibleTable(renderedHubGridOne, hubGridOneAttached);
+  hubGridOneAttached = true;
 
   for (i = 0; i < dataTwoTen.length; i++) {
     dataTwoTen[i].no = i + 1;
     hubGridTwoTen.addRowData(i + 1, dataTwoTen[i]);
   }
   var renderedHubGridTwoTen = document.querySelector('#gview_hubs-grid-2-10');
-  collapsibleTable(renderedHubGridTwoTen);
+  collapsibleTable(renderedHubGridTwoTen, hubGridTwoTenAttached);
+  hubGridTwoTenAttached = true;
 
   for (i = 0; i < dataElevenMore.length; i++) {
     dataElevenMore[i].no = i + 1;
     hubGridEleveMore.addRowData(i + 1, dataElevenMore[i]);
   }
   var renderedHubGridEleveMore = document.querySelector('#gview_hubs-grid-11');
-  collapsibleTable(renderedHubGridEleveMore);
-
+  collapsibleTable(renderedHubGridEleveMore, hubGridEleveMoreAttached);
+  hubGridEleveMoreAttached = true;
 };
 
-var collapsibleTable = function (grid) {
+var collapsibleTable = function (grid, attached) {
   if (grid) {
     var title = grid.querySelector('.ui-jqgrid-titlebar');
     var header = grid.querySelector('.ui-jqgrid-hdiv');
     var table = grid.querySelector('.ui-jqgrid-bdiv');
     if (title && header && table) {
-      header.style.display = 'none';
-      table.style.display = 'none';
-      title.addEventListener('dblclick', function () {
-        if (header.style.display === 'none') {
-          header.style.display = '';
-          table.style.display = '';
-        }
-        else {
-          header.style.display = 'none';
-          table.style.display = 'none';
-        }
-      });
+      if (!attached) {
+        header.style.display = 'none';
+        table.style.display = 'none';
+        title.addEventListener('dblclick', function () {
+          if (header.style.display === 'none') {
+            header.style.display = '';
+            table.style.display = '';
+          }
+          else {
+            header.style.display = 'none';
+            table.style.display = 'none';
+          }
+        });
+      }
+      else {
+        header.style.display = 'none';
+        table.style.display = 'none';
+      }
     }
   }
 };
