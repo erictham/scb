@@ -253,16 +253,16 @@ var renderGrid = function (data) {
   hubGridEleveMore.jqGrid('clearGridData');
   var i = 0;
   var dataZero = data.filter(function (datum) {
-    return datum.degree === 0;
+    return datum.degree > 20;
   });
   var dataOne = data.filter(function (datum) {
-    return datum.degree === 1;
+    return datum.degree > 5 && datum.degree <=20;
   });
   var dataTwoTen = data.filter(function (datum) {
-    return datum.degree >= 2 && datum.degree <= 10;
+    return datum.degree >= 2 && datum.degree <= 5;
   });
   var dataElevenMore = data.filter(function (datum) {
-    return datum.degree > 10;
+    return datum.degree < 2;
   });
   for (i = 0; i < dataZero.length; i++) {
     dataZero[i].no = i + 1;
