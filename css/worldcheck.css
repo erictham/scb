@@ -358,6 +358,15 @@ text.main {
 }
 
 
+circle.level1 {
+	stroke: #FF8C00;
+}
+
+circle.level2 {
+    stroke: #777;
+}
+
+
 /* ....................................................................... */
 
 /* no longer used */
