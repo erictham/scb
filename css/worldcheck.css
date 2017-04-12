@@ -311,6 +311,14 @@ line.link {
     stroke: #B2D9D8;
 }
 
+circle.level1{
+	stroke: #FF4500;
+	stroke-width: 2px;
+}
+
+circle.level2{
+	stroke:#777;
+}
 
 /* ....................................................................... */
 /* Graph labels */
@@ -355,15 +363,6 @@ text.nshadow {
 text.main {
     font: 12px;/*sans-serif;*/
     font-weight: bold;
-}
-
-
-circle.level1 {
-	stroke: #FF8C00;
-}
-
-circle.level2 {
-    stroke: #777;
 }
 
 
