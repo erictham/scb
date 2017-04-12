@@ -37,9 +37,12 @@ var selectedItem = "GE.json";
 var optionItems = [
  {"text": "Macy's", "value": "Macy.json"},
   {"text": "General Electric", "value": "GE.json"},
-  {"text": "Tata", "value": "Tata.json"},
+  {"text": "Tata Steel", "value": "TataSteel.json"},
   {"text": "Inditex", "value": "Inditex.json"},
-  {"text": "H&M", "value": "HM.json"}
+  {"text": "Tune Group", "value": "TuneGroup.json"},
+  {"text": "Amazon", "value": "Amazon.json"},
+  {"text": "H&M", "value": "HM.json"},
+  {"text": "Panasonic India", "value": "Panasonic.json"}
 ];
 
 var analyticItems = [
@@ -58,10 +61,6 @@ var hubGridTwoTen = undefined;
 var hubGridEleveMore = undefined;
 var hubGridContainer = undefined;
 var weightTooltip = undefined;
-var hubGridZeroAttached = false;
-var hubGridOneAttached = false;
-var hubGridTwoTenAttached = false;
-var hubGridEleveMoreAttached = false;
 
 var initializeSelect = function () {
   var select = document.querySelector("#organizationsSelect");
@@ -171,7 +170,7 @@ var initializeGrid = function () {
       multiselect: false,
       rowNum: 100,
       viewrecords: false,
-      caption: "Main Hub",
+      caption: "Main Company Hubs",
     });
 
     hubGridOne = $("#hubs-grid-1");
@@ -253,13 +252,16 @@ var renderGrid = function (data) {
   hubGridEleveMore.jqGrid('clearGridData');
   var i = 0;
   var dataZero = data.filter(function (datum) {
-    return datum.degree > 20;
+    //return datum.degree === 0;
+	return datum.degree > 20;
   });
   var dataOne = data.filter(function (datum) {
-    return datum.degree > 5 && datum.degree <=20;
+   // return datum.degree === 1;
+   return datum.degree > 5 && datum.degree <= 20 ;
   });
   var dataTwoTen = data.filter(function (datum) {
-    return datum.degree >= 2 && datum.degree <= 5;
+    //return datum.degree >= 2 && datum.degree <= 10;
+	return datum.degree >= 2 && datum.degree <= 5;
   });
   var dataElevenMore = data.filter(function (datum) {
     return datum.degree < 2;
@@ -269,75 +271,66 @@ var renderGrid = function (data) {
     hubGridZero.addRowData(i + 1, dataZero[i]);
   }
   var renderedHubGridZero = document.querySelector('#gview_hubs-grid-0');
-  collapsibleTable(renderedHubGridZero, hubGridZeroAttached);
-  hubGridZeroAttached = true;
+  collapsibleTable(renderedHubGridZero);
   
   for (i = 0; i < dataOne.length; i++) {
     dataOne[i].no = i + 1;
     hubGridOne.addRowData(i + 1, dataOne[i]);
   }
   var renderedHubGridOne = document.querySelector('#gview_hubs-grid-1');
-  collapsibleTable(renderedHubGridOne, hubGridOneAttached);
-  hubGridOneAttached = true;
+  collapsibleTable(renderedHubGridOne);
 
   for (i = 0; i < dataTwoTen.length; i++) {
     dataTwoTen[i].no = i + 1;
     hubGridTwoTen.addRowData(i + 1, dataTwoTen[i]);
   }
   var renderedHubGridTwoTen = document.querySelector('#gview_hubs-grid-2-10');
-  collapsibleTable(renderedHubGridTwoTen, hubGridTwoTenAttached);
-  hubGridTwoTenAttached = true;
+  collapsibleTable(renderedHubGridTwoTen);
 
   for (i = 0; i < dataElevenMore.length; i++) {
     dataElevenMore[i].no = i + 1;
     hubGridEleveMore.addRowData(i + 1, dataElevenMore[i]);
   }
   var renderedHubGridEleveMore = document.querySelector('#gview_hubs-grid-11');
-  collapsibleTable(renderedHubGridEleveMore, hubGridEleveMoreAttached);
-  hubGridEleveMoreAttached = true;
+  collapsibleTable(renderedHubGridEleveMore);
+
 };
 
-var collapsibleTable = function (grid, attached) {
+var collapsibleTable = function (grid) {
   if (grid) {
     var title = grid.querySelector('.ui-jqgrid-titlebar');
     var header = grid.querySelector('.ui-jqgrid-hdiv');
     var table = grid.querySelector('.ui-jqgrid-bdiv');
     if (title && header && table) {
-      if (!attached) {
-        header.style.display = 'none';
-        table.style.display = 'none';
-        title.addEventListener('dblclick', function () {
-          if (header.style.display === 'none') {
-            header.style.display = '';
-            table.style.display = '';
-          }
-          else {
-            header.style.display = 'none';
-            table.style.display = 'none';
-          }
-        });
-      }
-      else {
-        header.style.display = 'none';
-        table.style.display = 'none';
-      }
+      header.style.display = 'none';
+      table.style.display = 'none';
+      title.addEventListener('dblclick', function () {
+        if (header.style.display === 'none') {
+          header.style.display = '';
+          table.style.display = '';
+        }
+        else {
+          header.style.display = 'none';
+          table.style.display = 'none';
+        }
+      });
     }
   }
 };
 
-var displayWeightTooltip = function (link, weight) {
+var displayWeightTooltip = function (link, Txnamt) {
   if (weightTooltip) {
     var box = link[0][0].getBoundingClientRect();
     if (box) {
       weightTooltip.style.top = box.top + 'px';
       weightTooltip.style.left = box.left + 'px';
       weightTooltip.style.display = '';
-      weightTooltip.innerHTML = "Txn Amt (millions):" + weight;
+      weightTooltip.innerHTML = "Txn Amt (millions):" + Txnamt;
     }
   }
   else {
     weightTooltip = document.querySelector('#weightTooltip');
-    displayWeightTooltip(link, weight);
+    displayWeightTooltip(link, displayWeightTooltip);
   }
 };
 
@@ -568,6 +561,10 @@ function D3ok() {
     .domain([min_score, (min_score+max_score)/2, max_score])
     .range(["#57E964", "yellow", "#488AC7"]);
     
+	var grad = svg.append("defs").append("linearGradient").attr("id", "grad")
+    .attr("x1", "100%").attr("x2", "0%");
+	grad.append("stop").attr("offset", "50%").style("stop-color", "blue");
+	grad.append("stop").attr("offset", "50%").style("stop-color", "orange");
       // Add the node & link arrays to the layout, and start it
       force
         .nodes(nodeArray)
@@ -617,6 +614,15 @@ function D3ok() {
         .data(linkArray, function(d) {return d.source.id+'-'+d.target.id;} )
         .enter().append("line")
         .style('stroke-width', function(d) { return edge_width(d.weight);} )
+		.style('stroke', function(d) 
+			{ if (d.origin === 10 ) {return "#FFB266";} 
+			else if (d.origin === 1 ) {return "#FFFFFF";}} 			   
+			   )
+		.style('stroke-dasharray', function(d) 
+			{ if (d.origin === 11 ) 
+				{return ("3,3")}
+			  else {return ("")} } 			   
+			   )
         .attr("class", "link")
         .style("marker-end",  "url(#suit)")
         .attr("title", function (d) {
@@ -625,8 +631,7 @@ function D3ok() {
         .on("mouseover", function (d) {
           var link = d3.select(this);
           link.style("stroke", "#0072AA");
-          
-          displayWeightTooltip(link, d.weight);
+          displayWeightTooltip(link, d.Txnamt);
         })
         .on("mouseout", function (d) {
           d3.select(this).style("stroke", null);
